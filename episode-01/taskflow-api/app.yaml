@@ -1,0 +1,37 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: taskflow-api
+  labels:
+    app: taskflow-api
+spec:
+  type: ClusterIP
+  selector:
+    app: taskflow-api
+  ports:
+    - name: tcp
+      port: 8080
+      protocol: TCP
+      targetPort: 8080
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: taskflow-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: taskflow-api
+  template:
+    metadata:
+      labels:
+        app: taskflow-api
+        version: v1
+    spec:
+      containers:
+      - name: taskflow-api
+        image: taskflow-api
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8080
